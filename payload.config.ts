@@ -1,7 +1,6 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
-import { resendAdapter } from '@payloadcms/email-resend'
 import { buildConfig } from 'payload'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -29,6 +28,7 @@ import { WhatsAppMessages } from './src/collections/WhatsAppMessages'
 import { WhatsAppMedia } from './src/collections/WhatsAppMedia'
 import { SavedSearches } from './src/collections/SavedSearches'
 import { Notifications } from './src/collections/Notifications'
+import { brevoAdapter } from './src/lib/brevoEmailAdapter'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -46,10 +46,10 @@ export default buildConfig({
   editor: lexicalEditor({}),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: { outputFile: path.resolve(dirname, 'src/payload-types.ts') },
-  email: resendAdapter({
-    defaultFromAddress: 'onboarding@resend.dev',
+  email: brevoAdapter({
+    defaultFromAddress: process.env.EMAIL_FROM || 'no-reply@magariyetu.co.ke',
     defaultFromName: 'Magariyetu',
-    apiKey: process.env.RESEND_API_KEY || '',
+    apiKey: process.env.BREVO_API_KEY || '',
   }),
   db: postgresAdapter({
     pool: {

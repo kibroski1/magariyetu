@@ -84,8 +84,8 @@ export default function PrivacyPage() {
         <ul>
           <li><strong>Other users:</strong> your name, and phone or WhatsApp number if you have chosen to display it, are shown on your own Listings so interested Buyers can contact you. Dealer verification status is shown publicly; the documents behind it are not.</li>
           <li><strong>Payment processor:</strong> your phone number and payment amount are shared with our M-Pesa payment processor (IntaSend) solely to process Featured Placement and subscription payments.</li>
-          <li><strong>SMS provider:</strong> your phone number is shared with our SMS provider (Africa&apos;s Talking) to deliver OTP codes and lead notifications.</li>
-          <li><strong>Email provider:</strong> your email address is shared with our transactional email provider (Resend) to deliver account and lead-notification emails.</li>
+          <li><strong>Phone-verification provider:</strong> your phone number is shared with Phone.Email to verify your number when you choose phone sign-in. We may use an SMS provider for seller lead notifications.</li>
+          <li><strong>Email provider:</strong> your email address is shared with our transactional email provider (Brevo) to deliver account and lead-notification emails.</li>
           <li><strong>Hosting and storage providers:</strong> uploaded photographs and platform data are stored with our cloud hosting and file storage providers, who process it only on our instructions.</li>
           <li><strong>Regulators and law enforcement:</strong> where we are legally required to disclose data, including to the ODPC or law enforcement under a lawful request.</li>
         </ul>

@@ -174,7 +174,7 @@ export default function TermsPage() {
 
       <LegalSection number="10" title="Communications">
         <p>
-          By registering, you consent to receive account-related SMS and email messages, including OTP codes and
+          By registering, you consent to receive account-related phone-verification and email messages, including OTP codes and
           notifications about enquiries on your Listings. You may opt out of non-essential marketing communications at
           any time through your account settings or by contacting us; you cannot opt out of essential service
           messages, such as OTP codes or payment confirmations, while continuing to use the affected feature.

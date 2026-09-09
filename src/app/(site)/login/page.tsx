@@ -3,7 +3,7 @@
 import { useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { PhoneOtpLogin } from '@/components/auth/PhoneOtpLogin'
+import { PhoneEmailLogin } from '@/components/auth/PhoneEmailLogin'
 
 function LoginFormContent() {
   const router = useRouter()
@@ -48,7 +48,7 @@ function LoginFormContent() {
           onClick={() => setMode('phone')}
           className={`rounded px-3 py-1 ${mode === 'phone' ? 'bg-ink text-white' : 'border border-ink-100 text-ink-400'}`}
         >
-          Phone (SMS code)
+          Phone
         </button>
         <button
           type="button"
@@ -61,7 +61,7 @@ function LoginFormContent() {
 
       {mode === 'phone' ? (
         <div className="rounded-lg border border-ink-100 bg-white p-6">
-          <PhoneOtpLogin onSuccess={() => { router.push(redirectTo); router.refresh() }} />
+          <PhoneEmailLogin redirectTo={redirectTo} onSuccess={() => { router.push(redirectTo); router.refresh() }} />
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4 rounded-lg border border-ink-100 bg-white p-6">
