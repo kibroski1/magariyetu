@@ -20,6 +20,10 @@ interface SearchParams {
 
 interface ListingsViewProps {
   forcedCategory?: string
+  forcedMake?: string
+  forcedModel?: string
+  forcedYear?: number
+  forcedCounty?: string
   searchParams?: Promise<SearchParams>
   title?: string
   description?: ReactNode
@@ -29,7 +33,7 @@ function firstParam(value: string | string[] | undefined): string | undefined {
   return Array.isArray(value) ? value[0] : value
 }
 
-function buildWhere(params: SearchParams, forcedCategory?: string): Where {
+function buildWhere(params: SearchParams, forcedCategory?: string, forcedMake?: string, forcedModel?: string, forcedYear?: number, forcedCounty?: string): Where {
   const and: Where[] = [{ status: { equals: 'active' } }]
   const category = forcedCategory ?? firstParam(params.category)
   const condition = firstParam(params.condition)
@@ -41,6 +45,10 @@ function buildWhere(params: SearchParams, forcedCategory?: string): Where {
   const q = firstParam(params.q)
 
   if (category) and.push({ category: { equals: category } })
+  if (forcedMake) and.push({ make: { equals: forcedMake } })
+  if (forcedModel) and.push({ model: { equals: forcedModel } })
+  if (forcedYear) and.push({ yearOfManufacture: { equals: forcedYear } })
+  if (forcedCounty) and.push({ county: { equals: forcedCounty } })
   if (condition) and.push({ condition: { equals: condition } })
   if (make) and.push({ make: { contains: make } })
   if (county) and.push({ county: { equals: county } })
@@ -75,13 +83,13 @@ function toCardData(doc: any): ListingCardData {
 
 const PAGE_SIZE = 24
 
-export async function ListingsView({ forcedCategory, searchParams, title, description }: ListingsViewProps) {
+export async function ListingsView({ forcedCategory, forcedMake, forcedModel, forcedYear, forcedCounty, searchParams, title, description }: ListingsViewProps) {
   const params = (await searchParams) ?? {}
   const payload = await getPayload()
   const currentPage = Number(firstParam(params.page) ?? 1)
   const { docs, totalDocs, totalPages, page } = await payload.find({
     collection: 'listings',
-    where: buildWhere(params, forcedCategory),
+    where: buildWhere(params, forcedCategory, forcedMake, forcedModel, forcedYear, forcedCounty),
     limit: PAGE_SIZE,
     page: Number.isFinite(currentPage) && currentPage > 0 ? currentPage : 1,
     sort: '-featured,-createdAt',

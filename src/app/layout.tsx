@@ -15,12 +15,35 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_KE',
   },
+  verification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION } : undefined,
+  manifest: '/site.webmanifest',
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon-48.png', sizes: '48x48', type: 'image/png' },
+      { url: '/favicon-96.png', sizes: '96x96', type: 'image/png' },
+      { url: '/favicon-144.png', sizes: '144x144', type: 'image/png' },
+    ],
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const organizationSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Magariyetu',
+    url: process.env.NEXT_PUBLIC_SERVER_URL || 'https://magariyetu.co.ke',
+    description: 'Kenya’s marketplace for cars, trucks, machinery, parts and vehicle services.',
+  }
+
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {/* eslint-disable-next-line react/no-danger */}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }} />
+        {children}
+      </body>
     </html>
   )
 }

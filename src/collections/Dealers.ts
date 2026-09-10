@@ -31,6 +31,16 @@ export const Dealers: CollectionConfig = {
     { name: 'coverImage', type: 'upload', relationTo: 'media' },
     { name: 'description', type: 'textarea' },
     {
+      name: 'seo',
+      type: 'group',
+      admin: { description: 'Optional editor overrides for this public storefront. Leave empty to use generated page metadata.' },
+      fields: [
+        { name: 'metaTitle', type: 'text', maxLength: 60 },
+        { name: 'metaDescription', type: 'textarea', maxLength: 160 },
+        { name: 'indexing', type: 'select', defaultValue: 'auto', options: [{ label: 'Automatic (recommended)', value: 'auto' }, { label: 'Allow indexing', value: 'index' }, { label: 'Do not index', value: 'noindex' }] },
+      ],
+    },
+    {
       name: 'county',
       type: 'select',
       required: true,

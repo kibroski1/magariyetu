@@ -37,7 +37,7 @@ The wedge — nobody combines open multi-vendor breadth with real trust infrastr
 5. **Duty/clearance status on import listings** (`dutyStatus` field) — "duty paid" vs. "bonded/pre-clearance" is something buyers ask about immediately and none of the four competitors surface as a filterable field.
 6. **Dealer CSV bulk upload** — a dealer with an existing stock spreadsheet posts their whole inventory in one request.
 7. **WhatsApp-first contact**, with every click logged as a lead, plus an actual SMS/email notification to the seller when one comes in — not just a `wa.me` link with no data behind it.
-8. **Phone-first login** (`/api/auth/otp/*`) alongside email/password, because this market is phone-first, not email-first.
+8. **Phone-first login** through Phone.Email, with server-side token validation before issuing a Payload session; email/password remains available as an alternative.
 
 ## Getting started
 
@@ -47,7 +47,9 @@ cp .env.example .env
 # fill in DATABASE_URI (Postgres — Supabase, Neon, or Railway all work),
 # PAYLOAD_SECRET and OTP_HASH_SECRET (openssl rand -base64 32 each),
 # MPESA_* sandbox credentials,
-# AT_USERNAME/AT_API_KEY (Africa's Talking, sandbox mode needs no real key to start)
+# PHONE_EMAIL_CLIENT_ID (Phone.Email's dashboard)
+# BREVO_API_KEY (Brevo transactional email)
+# AT_USERNAME/AT_API_KEY (Africa's Talking; seller lead-notification fallback)
 npx payload generate:importmap   # regenerates src/app/(payload)/admin/importMap.js properly
 npm run generate:types            # produces src/payload-types.ts from the live collections
 npm run seed:crsp                 # imports crsp.xlsx from the project root or scripts/
@@ -68,7 +70,7 @@ Wired to Vercel Blob via `@payloadcms/storage-vercel-blob`, registered as a plug
 
 ### What's genuinely built vs. what's a stub
 
-**Fully wired:** the data model (9 collections), role-based access control, the sell wizard → moderation queue → active listing pipeline, price-outlier moderation, search/filter (URL-driven, shareable links), duty-status and spare-parts/tuk-tuk fields, the M-Pesa boost flow end to end, dealer storefronts, seller analytics, lead SMS/email notifications, image watermarking, phone-OTP login, the per-vehicle inspection badge system, SEO metadata + `Schema.org/Vehicle` structured data on listing pages, the duty calculator (client and API versions), server-side CRSP search, CSV bulk upload, and image storage via Vercel Blob.
+**Fully wired:** the data model (9 collections), role-based access control, the sell wizard → moderation queue → active listing pipeline, price-outlier moderation, search/filter (URL-driven, shareable links), duty-status and spare-parts/tuk-tuk fields, the M-Pesa boost flow end to end, dealer storefronts, seller analytics, lead SMS/email notifications, image watermarking, Phone.Email phone login, the per-vehicle inspection badge system, SEO metadata + `Schema.org/Vehicle` structured data on listing pages, the duty calculator (client and API versions), server-side CRSP search, CSV bulk upload, and image storage via Vercel Blob.
 
 **Deliberately a stub, called out in code comments where it matters:**
 - The CRSP schedule is imported into the `crsp-schedule` collection from `crsp.xlsx`; the calculator searches it server-side so thousands of rows are not loaded into the browser.

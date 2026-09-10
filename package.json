@@ -11,17 +11,18 @@
     "lint": "next lint",
     "payload": "payload",
     "generate:types": "payload generate:types",
+    "migrate": "payload migrate",
     "seed:crsp": "tsx scripts/seedCrsp.ts",
     "seed:crsp:fast": "tsx scripts/seedCrspFast.ts"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "3.88.0",
-    "@payloadcms/email-resend": "^3.88.0",
+    "@payloadcms/email-resend": "3.88.0",
     "@payloadcms/next": "3.88.0",
     "@payloadcms/richtext-lexical": "3.88.0",
     "@payloadcms/storage-vercel-blob": "3.88.0",
     "dotenv": "^17.4.2",
-    "graphql": "^16.14.2",
+    "graphql": "16.8.1",
     "next": "15.4.11",
     "payload": "3.88.0",
     "react": "^19.0.0",
@@ -29,6 +30,9 @@
     "sharp": "^0.33.5",
     "xlsx": "^0.18.5",
     "zod": "^3.23.8"
+  },
+  "overrides": {
+    "graphql": "16.8.1"
   },
   "devDependencies": {
     "@types/node": "^22.9.0",

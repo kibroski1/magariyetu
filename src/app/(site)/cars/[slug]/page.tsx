@@ -12,6 +12,8 @@ import { ReportButton } from '@/components/site/ReportButton'
 import Link from 'next/link'
 import { ShareButtons } from '@/components/site/ShareButtons'
 import { ComparisonButton } from '@/components/listings/ComparisonButton'
+import { Breadcrumbs } from '@/components/seo/Breadcrumbs'
+import { taxonomySlug } from '@/lib/seo'
 
 function formatKes(amount: number) {
   return new Intl.NumberFormat('en-KE', { style: 'currency', currency: 'KES', maximumFractionDigits: 0 }).format(amount)
@@ -21,9 +23,10 @@ async function getListing(slug: string) {
   const payload = await getPayload()
   const { docs } = await payload.find({
     collection: 'listings',
-    where: { and: [{ slug: { equals: slug } }, { status: { equals: 'active' } }] },
+    where: { and: [{ slug: { equals: slug } }, { status: { in: ['active', 'sold'] } }] },
     depth: 2, // resolve seller + dealer + image relationships
     limit: 1,
+    overrideAccess: true,
   })
   return docs[0] as any | undefined
 }
@@ -38,18 +41,22 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!listing) return {}
 
   const imageUrl = listing.images?.[0]?.image?.sizes?.card?.url
-  const description = `${listing.yearOfManufacture} ${listing.make} ${listing.model} — KES ${Number(listing.price).toLocaleString()}. ${listing.description?.slice(0, 140) ?? ''}`
+  const generatedDescription = `${listing.yearOfManufacture} ${listing.make} ${listing.model} — KES ${Number(listing.price).toLocaleString()}. ${listing.description?.slice(0, 140) ?? ''}`
+  const title = listing.seo?.metaTitle || listing.title
+  const description = listing.seo?.metaDescription || generatedDescription
 
   return {
-    title: listing.title,
+    title,
     description,
+    alternates: { canonical: `/cars/${listing.slug}` },
+    robots: listing.seo?.indexing === 'noindex' ? { index: false, follow: true } : { index: true, follow: true },
     openGraph: {
-      title: listing.title,
+      title,
       description,
       images: imageUrl ? [{ url: imageUrl }] : undefined,
       type: 'website',
     },
-    twitter: { card: 'summary_large_image', title: listing.title, description, images: imageUrl ? [imageUrl] : undefined },
+    twitter: { card: 'summary_large_image', title, description, images: imageUrl ? [imageUrl] : undefined },
   }
 }
 
@@ -69,7 +76,7 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
     fuelType: listing.fuelType,
     vehicleTransmission: listing.transmission,
     image: listing.images?.map((img: any) => img.image?.sizes?.full?.url).filter(Boolean),
-    offers: { '@type': 'Offer', price: listing.price, priceCurrency: 'KES', availability: 'https://schema.org/InStock' },
+    offers: { '@type': 'Offer', price: listing.price, priceCurrency: 'KES', availability: listing.status === 'sold' ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock' },
   }
 
   // Best-effort view increment — fire and forget, never block rendering on
@@ -80,8 +87,12 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
     .catch(() => undefined)
 
   const sellerPhone = listing.dealer?.whatsappNumber || listing.seller?.phone
+  const isActive = listing.status === 'active'
   const isDealer = Boolean(listing.dealer)
   const isVerified = listing.dealer?.verificationStatus === 'verified' || listing.seller?.idVerified
+  const makePath = `/cars/make/${taxonomySlug(listing.make)}`
+  const modelPath = `${makePath}/${taxonomySlug(listing.model)}`
+  const yearPath = `${modelPath}/${listing.yearOfManufacture}`
 
   const specs: [string, string | number | undefined][] = [
     ['Condition', CONDITION_LABELS[listing.condition as keyof typeof CONDITION_LABELS]],
@@ -125,8 +136,24 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
     limit: 1,
   })
   const inspection = passedInspections[0] as any | undefined
+  const { docs: relatedListings } = await payload.find({
+    collection: 'listings',
+    where: { and: [{ status: { equals: 'active' } }, { id: { not_equals: listing.id } }, { category: { equals: listing.category } }, { or: [{ model: { equals: listing.model } }, { make: { equals: listing.make } }] }] },
+    depth: 0,
+    sort: '-featured,-createdAt',
+    limit: 4,
+  })
 
   return (
+    <div>
+      <Breadcrumbs items={[
+        { label: 'Home', href: '/' },
+        { label: 'Cars', href: '/cars' },
+        { label: listing.make, href: makePath },
+        { label: listing.model, href: modelPath },
+        { label: String(listing.yearOfManufacture), href: yearPath },
+        { label: listing.title },
+      ]} />
     <div className="grid gap-8 lg:grid-cols-3">
       {/* eslint-disable-next-line react/no-danger */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(vehicleSchema) }} />
@@ -149,7 +176,7 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
             {listing.images.slice(1, 6).map((img: any, i: number) => (
               <div key={i} className="relative aspect-square overflow-hidden rounded bg-ink-50">
                 {img.image?.sizes?.thumbnail?.url && (
-                  <Image src={img.image.sizes.thumbnail.url} alt="" fill className="object-cover" />
+                  <Image src={img.image.sizes.thumbnail.url} alt={`${listing.title} — image ${i + 2}`} fill className="object-cover" />
                 )}
               </div>
             ))}
@@ -157,6 +184,7 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
         )}
 
         <h1 className="mt-6 font-display text-2xl font-bold text-ink">{listing.title}</h1>
+        {!isActive && <p className="mt-3 inline-block rounded bg-ink-100 px-3 py-1 text-sm font-semibold text-ink">This vehicle has been sold</p>}
         <p className="mt-2 whitespace-pre-line text-ink-400">{listing.description}</p>
 
         <dl className="mt-6 grid grid-cols-2 gap-x-6 gap-y-3 rounded-lg border border-ink-100 bg-white p-6 sm:grid-cols-3">
@@ -186,13 +214,13 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
             </a>
           )}
 
-          {sellerPhone && (
+          {isActive && sellerPhone && (
             <div className="mt-4">
               <WhatsAppButton listingId={listing.id} phoneNumber={sellerPhone} listingTitle={listing.title} />
             </div>
           )}
-          {listing.seller?.id && <div className="mt-3"><PlatformChatButton recipientId={listing.seller.id} listingId={listing.id} /></div>}
-          <div className="mt-4"><ReportButton targetType="listing" targetId={listing.id} /></div>
+          {isActive && listing.seller?.id && <div className="mt-3"><PlatformChatButton recipientId={listing.seller.id} listingId={listing.id} /></div>}
+          {isActive ? <div className="mt-4"><ReportButton targetType="listing" targetId={listing.id} /></div> : <p className="mt-4 text-sm text-ink-400">This listing is no longer accepting enquiries. Browse similar available vehicles below.</p>}
           <div className="mt-3"><ShareButtons title={listing.title} /></div>
           <div className="mt-3">
              <ComparisonButton listingId={listing.id} />
@@ -207,6 +235,24 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
           <br />Estimate KRA duty for this year, engine, and fuel type →
         </a>
       </aside>
+    </div>
+    {relatedListings.length > 0 && (
+      <section className="mt-10 border-t border-ink-100 pt-8">
+        <h2 className="font-display text-xl font-bold text-ink">Similar vehicles available now</h2>
+        <p className="mt-1 text-sm text-ink-400">More {listing.make} and {listing.model} listings from the Magari Yetu marketplace.</p>
+        <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {relatedListings.map((related: any) => (
+            <li key={related.id}>
+              <Link href={`/cars/${related.slug}`} className="block rounded-lg border border-ink-100 bg-white p-4 hover:shadow-md">
+                <span className="line-clamp-2 font-semibold text-ink">{related.title}</span>
+                <span className="mt-2 block font-mono text-sm text-ink">{formatKes(related.price)}</span>
+                <span className="mt-1 block text-xs text-ink-400">{related.yearOfManufacture} · {[related.town, related.county].filter(Boolean).join(', ')}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
     </div>
   )
 }
