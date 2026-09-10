@@ -164,6 +164,11 @@ export async function GET(req: NextRequest) {
       where,
       limit,
       page,
+
+      /*
+       * CRSP is a reference catalogue, not a newest-first feed.
+       * Keep results consistently A-Z.
+       */
       sort: 'sourceGroup,make,model,modelNumber',
     })
 
