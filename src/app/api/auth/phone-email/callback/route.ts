@@ -67,7 +67,7 @@ export async function POST(req: NextRequest) {
     })
   }
 
-  if (['suspended', 'banned'].includes(user.accountStatus) && (!user.suspensionEndsAt || new Date(user.suspensionEndsAt) > new Date())) {
+  if (['suspended', 'banned'].includes(user.accountStatus ?? '') && (!user.suspensionEndsAt || new Date(user.suspensionEndsAt) > new Date())) {
     return NextResponse.json({ error: 'This account is unavailable. Contact support if you believe this is an error.' }, { status: 403 })
   }
   if (!user._verified) {
@@ -76,7 +76,10 @@ export async function POST(req: NextRequest) {
 
   const tokenExpiration = payload.collections.users.config.auth.tokenExpiration || 60 * 60 * 24 * 7
   const { token } = await jwtSign({
-    fieldsToSign: { id: user.id, collection: 'users', email: user.email },
+    // Payload's generated type permits a missing email even though this
+    // collection requires it. Preserve a valid deterministic identifier for
+    // legacy records that predate the phone sign-in flow.
+    fieldsToSign: { id: user.id, collection: 'users', email: user.email ?? systemEmail(phone) },
     secret: payload.secret,
     tokenExpiration,
   })

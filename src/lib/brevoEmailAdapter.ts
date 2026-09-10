@@ -23,11 +23,11 @@ function addressList(value: SendEmailOptions['to']) {
  * the app avoids another mail transport dependency and lets Payload's native
  * verification and password-reset messages use the same sender as app mail.
  */
-export const brevoAdapter = (args: BrevoAdapterArgs): EmailAdapter<{ messageId: string }> => ({
+export const brevoAdapter = (args: BrevoAdapterArgs): EmailAdapter<{ messageId: string }> => () => ({
   defaultFromAddress: args.defaultFromAddress,
   defaultFromName: args.defaultFromName,
   name: 'brevo',
-  sendEmail: async (message) => {
+  sendEmail: async (message: SendEmailOptions) => {
     if (!args.apiKey) throw new Error('BREVO_API_KEY is not configured')
 
     const to = addressList(message.to)
