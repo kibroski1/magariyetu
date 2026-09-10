@@ -15,6 +15,7 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_KE',
   },
+  verification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION } : undefined,
   manifest: '/site.webmanifest',
   icons: {
     icon: [
@@ -28,9 +29,21 @@ export const metadata: Metadata = {
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const organizationSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Magariyetu',
+    url: process.env.NEXT_PUBLIC_SERVER_URL || 'https://magariyetu.co.ke',
+    description: 'Kenya’s marketplace for cars, trucks, machinery, parts and vehicle services.',
+  }
+
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {/* eslint-disable-next-line react/no-danger */}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }} />
+        {children}
+      </body>
     </html>
   )
 }

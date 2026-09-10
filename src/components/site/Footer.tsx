@@ -46,6 +46,8 @@ export function Footer() {
           <p className="font-display text-sm uppercase tracking-wide text-stamp">Tools</p>
           <ul className="mt-3 space-y-2 text-sm">
             <li><Link href="/tools/import-duty-calculator">Import duty calculator</Link></li>
+            <li><Link href="/guides">Buyer guides</Link></li>
+            <li><Link href="/blog">Car news & advice</Link></li>
           </ul>
         </div>
       </div>
@@ -54,6 +56,8 @@ export function Footer() {
         <span className="flex gap-4">
           <Link href="/terms" className="hover:text-white">Terms of Service</Link>
           <Link href="/privacy" className="hover:text-white">Privacy Policy</Link>
+          <Link href="/marketplace-rules" className="hover:text-white">Marketplace rules</Link>
+          <Link href="/about" className="hover:text-white">About</Link>
         </span>
       </div>
     </footer>

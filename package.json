@@ -11,6 +11,7 @@
     "lint": "next lint",
     "payload": "payload",
     "generate:types": "payload generate:types",
+    "migrate": "payload migrate",
     "seed:crsp": "tsx scripts/seedCrsp.ts",
     "seed:crsp:fast": "tsx scripts/seedCrspFast.ts"
   },

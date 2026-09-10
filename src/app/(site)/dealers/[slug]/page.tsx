@@ -1,8 +1,23 @@
 import { notFound } from 'next/navigation'
+import type { Metadata } from 'next'
 import { getPayload } from '@/lib/payload'
 import { CarCard } from '@/components/listings/CarCard'
 import { VerifiedBadge } from '@/components/badges/VerifiedBadge'
 import type { ListingCardData } from '@/types/listing'
+
+async function getDealer(slug: string) {
+  const payload = await getPayload()
+  const { docs } = await payload.find({ collection: 'dealers', where: { slug: { equals: slug } }, limit: 1 })
+  return docs[0] as any | undefined
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const dealer = await getDealer((await params).slug)
+  if (!dealer) return { robots: { index: false, follow: false } }
+  const title = dealer.seo?.metaTitle || `${dealer.businessName} — vehicle dealer in ${dealer.county}`
+  const description = dealer.seo?.metaDescription || dealer.description || `Browse active vehicles listed by ${dealer.businessName} in ${dealer.county}, Kenya.`
+  return { title, description, alternates: { canonical: `/dealers/${dealer.slug}` }, robots: dealer.seo?.indexing === 'noindex' ? { index: false, follow: true } : { index: true, follow: true } }
+}
 
 function toCardData(doc: any): ListingCardData {
   return {
@@ -16,9 +31,7 @@ function toCardData(doc: any): ListingCardData {
 export default async function DealerStorefrontPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const payload = await getPayload()
-
-  const { docs: dealerDocs } = await payload.find({ collection: 'dealers', where: { slug: { equals: slug } }, limit: 1 })
-  const dealer = dealerDocs[0] as any
+  const dealer = await getDealer(slug)
   if (!dealer) notFound()
 
   const { docs: listingDocs, totalDocs } = await payload.find({

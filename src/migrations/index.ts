@@ -2,6 +2,8 @@ import * as migration_20260829_130004_initial_schema from './20260829_130004_ini
 import * as migration_20260830_230000_listing_and_crsp_specs from './20260830_230000_listing_and_crsp_specs'
 import * as migration_20260830_231000_private_dealer_verification_documents from './20260830_231000_private_dealer_verification_documents'
 import * as migration_20260904_000000_align_crsp_with_kra_source from './20260904_000000_align_crsp_with_kra_source'
+import * as migration_20260910_000000_seo_fields from './20260910_000000_seo_fields'
+import * as migration_20260910_010000_editorial_content from './20260910_010000_editorial_content'
 
 export const migrations = [
   {
@@ -24,4 +26,10 @@ export const migrations = [
     down: migration_20260904_000000_align_crsp_with_kra_source.down,
     name: '20260904_000000_align_crsp_with_kra_source',
   },
+  {
+    up: migration_20260910_000000_seo_fields.up,
+    down: migration_20260910_000000_seo_fields.down,
+    name: '20260910_000000_seo_fields',
+  },
+  { up: migration_20260910_010000_editorial_content.up, down: migration_20260910_010000_editorial_content.down, name: '20260910_010000_editorial_content' },
 ]
