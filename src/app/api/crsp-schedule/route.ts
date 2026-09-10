@@ -40,7 +40,7 @@ function parseCsv(text: string): Record<string, string>[] {
 
   return lines
     .slice(1)
-    .filter(Boolean)
+    .filter((line) => line.trim().length > 0)
     .map((line) => {
       const cells = line.split(',')
 
@@ -72,7 +72,7 @@ export async function GET(req: NextRequest) {
     const make = searchParams.get('make')?.trim()
     const model = searchParams.get('model')?.trim()
     const sourceGroup = searchParams.get('sourceGroup')?.trim()
-    const verified = searchParams.get('verified')
+    const verified = searchParams.get('verified')?.toLowerCase()
 
     const conditions: Where[] = []
 
@@ -100,11 +100,6 @@ export async function GET(req: NextRequest) {
 
     /*
      * Source-sheet family filter.
-     *
-     * Allowed values:
-     * - motor-vehicle
-     * - motorcycle
-     * - tractor-grader
      */
     if (sourceGroup) {
       conditions.push({
@@ -115,24 +110,18 @@ export async function GET(req: NextRequest) {
     }
 
     /*
-     * Verified filter.
+     * Explicit safe verified filter.
      */
-    if (verified !== null) {
+    if (verified === 'true' || verified === 'false') {
       conditions.push({
         verified: {
-          equals: verified.toLowerCase() === 'true',
+          equals: verified === 'true',
         },
       })
     }
 
     /*
-     * Multi-word search.
-     *
-     * Example:
-     *
-     *   ?q=Toyota Vitz
-     *
-     * Each word must appear in make, model or model number.
+     * Multi-word search across make, model, or modelNumber.
      */
     if (query) {
       const words = query
@@ -175,12 +164,7 @@ export async function GET(req: NextRequest) {
       where,
       limit,
       page,
-
-      /*
-       * CRSP is a reference catalogue, not a newest-first feed.
-       * Keep results consistently A-Z.
-       */
-      sort: 'make,model,modelNumber',
+      sort: 'sourceGroup,make,model,modelNumber',
     })
 
     return NextResponse.json(result)
@@ -260,10 +244,6 @@ export async function POST(req: NextRequest) {
 
     for (const [i, row] of rows.entries()) {
       try {
-        /*
-         * Payload select fields only accept the declared values.
-         * Validate the CSV value before creating the record.
-         */
         const sourceGroup = SOURCE_GROUPS.includes(
           row.sourceGroup as SourceGroup,
         )
@@ -276,6 +256,11 @@ export async function POST(req: NextRequest) {
           )
         }
 
+        const crspVal = Number(row.crspValueKes)
+        if (Number.isNaN(crspVal)) {
+          throw new Error(`Invalid crspValueKes numerical value "${row.crspValueKes}"`)
+        }
+
         await payload.create({
           collection: 'crsp-schedule',
           data: {
@@ -283,25 +268,22 @@ export async function POST(req: NextRequest) {
             model: row.model,
             modelNumber: row.modelNumber || undefined,
             transmission: row.transmission || undefined,
-            driveConfiguration:
-              row.driveConfiguration || undefined,
-            engineCapacityText:
-              row.engineCapacityText || undefined,
-            engineCc: row.engineCc
+            driveConfiguration: row.driveConfiguration || undefined,
+            engineCapacityText: row.engineCapacityText || undefined,
+            engineCc: row.engineCc && !Number.isNaN(Number(row.engineCc))
               ? Number(row.engineCc)
               : undefined,
             bodyType: row.bodyType || undefined,
-            gvwKg: row.gvwKg
+            gvwKg: row.gvwKg && !Number.isNaN(Number(row.gvwKg))
               ? Number(row.gvwKg)
               : undefined,
-            seatingCapacity: row.seatingCapacity
+            seatingCapacity: row.seatingCapacity && !Number.isNaN(Number(row.seatingCapacity))
               ? Number(row.seatingCapacity)
               : undefined,
             fuelType: row.fuelType || undefined,
             sourceGroup,
-            crspValueKes: Number(row.crspValueKes),
-            verified:
-              row.verified?.toLowerCase() === 'true',
+            crspValueKes: crspVal,
+            verified: row.verified?.toLowerCase() === 'true',
             sourceNote: row.sourceNote || undefined,
           },
         })
