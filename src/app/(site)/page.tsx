@@ -100,15 +100,15 @@ export default async function HomePage() {
 
   return (
     <div className="space-y-12 lg:space-y-14">
-      <section className="overflow-hidden rounded-lg bg-ink text-white">
-        <div className="grid gap-8 px-6 py-12 lg:grid-cols-[1.15fr_.85fr] lg:px-14 lg:py-14">
+      <section className="overflow-hidden rounded-2xl bg-ink text-white shadow-2xl shadow-ink/10">
+        <div className="grid gap-8 px-6 py-10 sm:py-12 lg:grid-cols-[1.15fr_.85fr] lg:px-14 lg:py-16">
           <div>
-          <p className="font-mono text-xs uppercase tracking-widest text-stamp-light">Kenya&apos;s vehicle &amp; machinery marketplace</p>
-          <h1 className="mt-3 font-display text-4xl font-bold leading-tight sm:text-5xl">
-            Every gari, every duka, one logbook.
+          <p className="font-mono text-xs uppercase tracking-widest text-stamp-light">Kenyan vehicles, machinery &amp; parts</p>
+          <h1 className="mt-4 max-w-3xl font-display text-4xl font-bold leading-[1.05] sm:text-5xl lg:text-6xl">
+            Find a vehicle you can ask real questions about.
           </h1>
-          <p className="mt-4 max-w-lg text-ink-100">
-            Buy or sell vehicles, parts and machinery — then find verified dealers, certified mechanics, car hire and leasing services across Kenya.
+          <p className="mt-5 max-w-xl text-base leading-7 text-ink-100 sm:text-lg">
+            Browse cars, work vehicles, equipment and parts from Kenyan sellers. Check the details, compare options, estimate import duty, then contact the seller on WhatsApp when you&apos;re ready.
           </p>
             <form action="/cars" className="mt-7 max-w-xl rounded-lg bg-white p-2 text-ink shadow-xl" role="search">
               <label htmlFor="hero-search" className="sr-only">Search listings</label>
@@ -129,11 +129,14 @@ export default async function HomePage() {
               <span>Popular:</span>
               {POPULAR_SEARCHES.map((search) => <Link key={search.href} href={search.href} className="rounded-full border border-white/20 px-3 py-1 transition hover:bg-white/10">{search.label}</Link>)}
             </div>
-            <div className="mt-6"><Link href="/sell" className="rounded border border-white/30 px-5 py-2.5 font-display text-sm uppercase tracking-wide text-white transition hover:bg-white/10">Sell your vehicle</Link></div>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link href="/sell" className="rounded bg-stamp px-5 py-3 font-display text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-stamp-dark">Post your listing</Link>
+              <Link href="/tools/import-duty-calculator" className="rounded border border-white/30 px-5 py-3 font-display text-sm uppercase tracking-wide text-white transition hover:bg-white/10">Estimate import duty</Link>
+            </div>
           </div>
-          <div className="relative flex min-h-64 flex-wrap content-center gap-3 overflow-hidden rounded-lg border border-white/10 bg-ink-900/40 p-5 lg:pl-6">
+          <div className="relative flex min-h-72 flex-wrap content-center gap-3 overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br from-ink-900 to-ink p-6 lg:pl-8">
             {homeListings.listings.length > 0 && (
-              <div className="pointer-events-none absolute inset-0 grid grid-cols-2 gap-1 opacity-30">
+              <div className="pointer-events-none absolute inset-0 grid grid-cols-2 gap-1 opacity-20">
                 {homeListings.listings.slice(0, 4).map((listing) => (
                   listing.coverImageUrl !== '/placeholder-vehicle.jpg' && <img key={listing.id} src={listing.coverImageUrl} alt="" className="h-full w-full object-cover" />
                 ))}
@@ -142,20 +145,20 @@ export default async function HomePage() {
             <div className="absolute -right-16 -top-16 h-44 w-44 rounded-full border border-stamp/30" />
             <div className="absolute -bottom-24 -left-20 h-52 w-52 rounded-full border border-white/10" />
             <div className="relative flex flex-wrap content-center gap-3">
-            <p className="w-full font-mono text-xs uppercase tracking-widest text-stamp-light">Browse by need</p>
+            <p className="w-full font-mono text-xs uppercase tracking-widest text-stamp-light">Start with what you need</p>
               {CATEGORY_SHORTCUTS.slice(0, 5).map((c) => (
                 <Link key={c.href} href={c.href} className="rounded border border-white/20 bg-ink/70 px-4 py-2 text-sm font-medium backdrop-blur-sm transition hover:bg-white/10">
                   {c.label}
                 </Link>
               ))}
-              <Link href="/cars" className="w-full text-sm font-semibold text-stamp-light transition hover:text-white">View all categories →</Link>
+              <Link href="/cars" className="w-full pt-2 text-sm font-semibold text-stamp-light transition hover:text-white">See every category →</Link>
             </div>
           </div>
         </div>
         <div className="grid border-t border-white/10 bg-ink-900/30 sm:grid-cols-3">
-          <p className="px-6 py-4 text-sm text-ink-100 lg:px-14"><span className="mr-2 font-semibold text-white">Verified sellers</span>clear identification for confident buying</p>
-          <p className="px-6 py-4 text-sm text-ink-100"><span className="mr-2 font-semibold text-white">Duty clarity</span>estimates before you commit</p>
-          <p className="px-6 py-4 text-sm text-ink-100"><span className="mr-2 font-semibold text-white">Built for Kenya</span>vehicles, parts and services in one place</p>
+          <p className="px-6 py-4 text-sm text-ink-100 lg:px-14"><span className="mr-2 font-semibold text-white">Verified sellers</span>see who has completed checks</p>
+          <p className="px-6 py-4 text-sm text-ink-100"><span className="mr-2 font-semibold text-white">Duty estimator</span>budget before you import</p>
+          <p className="px-6 py-4 text-sm text-ink-100"><span className="mr-2 font-semibold text-white">Direct contact</span>talk to sellers on WhatsApp</p>
         </div>
       </section>
 

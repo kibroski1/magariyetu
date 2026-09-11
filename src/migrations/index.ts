@@ -4,6 +4,7 @@ import * as migration_20260830_231000_private_dealer_verification_documents from
 import * as migration_20260904_000000_align_crsp_with_kra_source from './20260904_000000_align_crsp_with_kra_source'
 import * as migration_20260910_000000_seo_fields from './20260910_000000_seo_fields'
 import * as migration_20260910_010000_editorial_content from './20260910_010000_editorial_content'
+import * as migration_20260911_210000_first_party_analytics from './20260911_210000_first_party_analytics'
 
 export const migrations = [
   {
@@ -32,4 +33,5 @@ export const migrations = [
     name: '20260910_000000_seo_fields',
   },
   { up: migration_20260910_010000_editorial_content.up, down: migration_20260910_010000_editorial_content.down, name: '20260910_010000_editorial_content' },
+  { up: migration_20260911_210000_first_party_analytics.up, down: migration_20260911_210000_first_party_analytics.down, name: '20260911_210000_first_party_analytics' },
 ]

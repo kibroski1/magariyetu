@@ -62,6 +62,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
                 {item.label}
               </Link>
             ))}
+            {user.role === 'admin' && <Link href="/dashboard/analytics" className="block rounded px-3 py-2 text-sm font-medium text-ink-400 hover:bg-ink-50 hover:text-ink">Marketplace analytics</Link>}
           </nav>
 
           <div>{children}</div>

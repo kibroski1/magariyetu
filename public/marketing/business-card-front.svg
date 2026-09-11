@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1050" height="600" viewBox="0 0 1050 600" role="img" aria-labelledby="title">
+  <title id="title">Magariyetu business card front</title>
+  <rect width="1050" height="600" fill="#10233F"/>
+  <image href="../brand/magariyetu-mark.png" x="54" y="74" width="410" height="410" preserveAspectRatio="xMidYMid meet"/>
+  <text x="555" y="240" fill="#F6F4EE" font-family="Arial, sans-serif" font-size="58" font-weight="700">MAGARI<tspan fill="#C98A2B">YETU</tspan></text>
+  <text x="558" y="300" fill="#D4DBE7" font-family="Arial, sans-serif" font-size="25" letter-spacing="4">KENYA'S SMARTER VEHICLE MARKETPLACE</text>
+  <rect x="558" y="362" width="370" height="4" fill="#C98A2B"/>
+  <text x="558" y="414" fill="#F6F4EE" font-family="Arial, sans-serif" font-size="28">Find it. Check it. Drive it.</text>
+  <text x="558" y="466" fill="#C98A2B" font-family="Arial, sans-serif" font-size="23">magariyetu.co.ke</text>
+</svg>

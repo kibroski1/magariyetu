@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 const browseLinks = [
   { name: 'Cars', href: '/cars' }, { name: 'Trucks & lorries', href: '/trucks' },
@@ -10,7 +11,10 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-30 border-b border-ink-100/80 bg-white/95 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="shrink-0 font-display text-xl font-bold tracking-tight text-ink" aria-label="Magariyetu home">MAGARI<span className="text-stamp-dark">YETU</span></Link>
+        <Link href="/" className="flex shrink-0 items-center gap-2" aria-label="Magariyetu home">
+          <Image src="/brand/magariyetu-mark.png" alt="" width={38} height={38} priority className="rounded-[7px]" />
+          <span className="font-display text-xl font-bold tracking-tight text-ink">MAGARI<span className="text-stamp-dark">YETU</span></span>
+        </Link>
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary navigation">
           <details className="group relative">
             <summary className="flex cursor-pointer list-none items-center gap-1 rounded px-3 py-2 text-sm font-semibold text-ink transition hover:bg-paper hover:text-stamp-dark">Browse vehicles <span className="text-xs transition group-open:rotate-180">⌄</span></summary>

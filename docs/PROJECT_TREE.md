@@ -18,6 +18,9 @@ magariyetu/
 |-- tsconfig.json
 |-- docs/
 |   |-- ARCHITECTURE.md
+|   |-- ARCHITECTURE_FOR_BEGINNERS.md
+|   |-- MARKETING_KIT.md
+|   |-- PRODUCT_AND_LAUNCH_PLAN.md
 |   |-- PRE_GITHUB_LAUNCH_CHECKLIST.md
 |   `-- PROJECT_TREE.md
 |-- scripts/
@@ -48,16 +51,16 @@ magariyetu/
     |   |   |-- duty-calculator/route.ts
     |   |   |-- listings/{bulk-upload,inquiry}/route.ts
     |   |   `-- payments/mpesa/{callback,status,stk-push}/route.ts
-    |   `-- dashboard/{layout.tsx,page.tsx,billing/page.tsx,listings/page.tsx,listings/new/page.tsx}
+    |   `-- dashboard/{layout.tsx,page.tsx,analytics/page.tsx,billing/page.tsx,listings/page.tsx,listings/new/page.tsx}
     |-- collections/
-    |   `-- {CrspSchedule,Dealers,FeaturedOrders,Inquiries,Inspections,Listings,Media,PhoneOtps,Users}.ts
+    |   `-- {AnalyticsEvents,CrspSchedule,Dealers,FeaturedOrders,Inquiries,Inspections,Listings,Media,PhoneOtps,Users}.ts
     |-- components/
     |   |-- auth/PhoneOtpLogin.tsx
     |   |-- badges/{FeaturedBadge,InspectedBadge,VerifiedBadge}.tsx
     |   |-- dashboard/BoostButton.tsx
     |   |-- legal/LegalDocument.tsx
     |   |-- listings/{CarCard,ListingsView,SearchFilters,SellWizard,WhatsAppButton}.tsx
-    |   |-- site/{Footer,Navbar}.tsx
+    |   |-- site/{AnalyticsTracker,CookiePreferences,Footer,Navbar}.tsx
     |   `-- tools/ImportDutyCalculator.tsx
     `-- lib/{auth,dutyCalculator,email,mpesa,payload,sms}.ts
 ```

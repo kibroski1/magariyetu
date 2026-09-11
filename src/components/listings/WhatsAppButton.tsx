@@ -1,5 +1,7 @@
 'use client'
 
+import { trackAnalytics } from '@/components/site/AnalyticsTracker'
+
 // A plain wa.me link would work, but it would also throw away the one thing
 // that makes Magariyetu's dashboard analytics possible: knowing a lead
 // happened at all. This fires a fire-and-forget POST to /api/listings on
@@ -16,6 +18,7 @@ export function WhatsAppButton({
   listingTitle: string
 }) {
   function handleClick() {
+    trackAnalytics('whatsapp-lead')
     fetch('/api/listings/inquiry', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

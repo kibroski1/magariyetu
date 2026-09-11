@@ -2,6 +2,33 @@
 
 Kenya's marketplace for new, locally assembled, imported, and locally used vehicles — plus trucks, trailers, heavy machinery, tuk-tuks, and spare parts — from individuals and dealers.
 
+## Start here (for a new developer)
+
+Magariyetu is one web application, not a separate website and backend. **Next.js** renders the pages visitors use; **Payload CMS** runs inside that same app and supplies the database models, admin panel, login system, and REST API. PostgreSQL stores the data. This means `npm run dev` starts the public site, the staff admin at `/admin`, and the API together.
+
+Read these in this order:
+
+1. [`docs/ARCHITECTURE_FOR_BEGINNERS.md`](docs/ARCHITECTURE_FOR_BEGINNERS.md) — the system map and how a listing travels through the product.
+2. [`docs/PROJECT_TREE.md`](docs/PROJECT_TREE.md) — a plain-English map of every important source folder and file group.
+3. [`docs/PRODUCT_AND_LAUNCH_PLAN.md`](docs/PRODUCT_AND_LAUNCH_PLAN.md) — pricing, revenue, cookies, analytics, security, WhatsApp, marketing, and future roadmap.
+4. [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — the detailed technical reference for when you are ready to change a collection or API flow.
+
+### Where should I make a change?
+
+| If you want to change… | Begin here |
+|---|---|
+| A public page or its wording | `src/app/(site)/` |
+| Navigation, footer, cookie choice UI | `src/components/site/` |
+| Search cards, selling form, WhatsApp button | `src/components/listings/` |
+| Seller dashboard | `src/app/dashboard/` and `src/components/dashboard/` |
+| What the database stores or who can edit it | `src/collections/` |
+| A custom server endpoint | `src/app/api/` |
+| Payments, WhatsApp, security or duty calculations | `src/lib/` |
+| Global colours, fonts and common CSS | `src/app/globals.css`, `tailwind.config.ts` |
+| Environment variables and secrets | `.env.example` (copy it to `.env`; never commit `.env`) |
+
+Do not edit `node_modules/`, `.next/`, `src/payload-types.ts`, or `src/payload-generated-schema.ts` by hand. They are installed or generated files. `public/` contains browser-served assets such as the favicon and web manifest.
+
 This is a working scaffold, not a finished product: the data model, auth, payment flow, trust/verification layer, and core pages are built and internally consistent (every local import in the project resolves to a real file — checked programmatically, not just by eye), but it has not been `npm install`'d or run against a live database in this environment. Follow **Getting started** below before you expect it to boot, and read **What's genuinely built vs. what's a stub** before you assume any specific feature works exactly as described.
 
 ## Why this architecture

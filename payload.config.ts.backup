@@ -1,4 +1,4 @@
-﻿import { postgresAdapter } from '@payloadcms/db-postgres'
+import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import { buildConfig } from 'payload'
@@ -42,7 +42,7 @@ export default buildConfig({
   serverURL,
   admin: {
     user: Users.slug,
-    meta: { titleSuffix: ' â€” Magariyetu Admin' },
+    meta: { titleSuffix: ' — Magariyetu Admin' },
   },
   collections: [Users, Dealers, ServiceProviders, Listings, Articles, Guides, Reviews, Reports, ContactMessages,SavedSearches, Notifications, AnalyticsEvents, AuditLogs, VerificationDocuments, Conversations, Messages, WhatsAppSubmissions, WhatsAppMessages, WhatsAppMedia, FeaturedOrders, Inquiries, Media, Inspections, PhoneOtps, CrspSchedule],
   editor: lexicalEditor({}),
@@ -66,13 +66,8 @@ export default buildConfig({
   csrf: [serverURL],
   plugins: [
     vercelBlobStorage({
-      enabled: Boolean(process.env.BLOB_READ_WRITE_TOKEN),
-      collections: {
-        media: true,
-      },
-      clientUploads: true,
+      collections: { media: true },
       token: process.env.BLOB_READ_WRITE_TOKEN,
     }),
   ],
 })
-
