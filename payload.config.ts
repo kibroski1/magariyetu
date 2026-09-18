@@ -65,14 +65,16 @@ export default buildConfig({
   cors: [serverURL],
   csrf: [serverURL],
   plugins: [
-    vercelBlobStorage({
-      enabled: Boolean(process.env.BLOB_READ_WRITE_TOKEN),
-      collections: {
-        media: true,
-      },
-      clientUploads: true,
-      token: process.env.BLOB_READ_WRITE_TOKEN,
-    }),
-  ],
+  vercelBlobStorage({
+    enabled: Boolean(process.env.BLOB_READ_WRITE_TOKEN),
+    collections: {
+      media: true,
+      'verification-documents': true,
+      'whatsapp-media': true,
+    },
+    clientUploads: true,
+    token: process.env.BLOB_READ_WRITE_TOKEN,
+  }),
+],
 })
 
