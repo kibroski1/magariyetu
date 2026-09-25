@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "payload migrate && next build",
+    "build": "payload migrate --force && next build", 
     "start": "next start",
     "lint": "next lint",
     "payload": "payload",
