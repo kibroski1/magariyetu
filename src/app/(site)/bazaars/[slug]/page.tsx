@@ -55,7 +55,7 @@ export default async function BazaarDetailPage({ params }: { params: Promise<{ s
       <section className="rounded-xl border border-ink-100 bg-neutral-50 p-6 md:p-8">
         <h2 className="font-display text-2xl font-bold text-ink mb-2">Attending this bazaar?</h2>
         <p className="text-sm text-ink-400 mb-6">Post your vehicle here so buyers can find you on bazaar day.</p>
-        <BazaarPostForm bazaarId={bazaar.id} />
+        <BazaarPostForm eventId={String(bazaar.id)} />
       </section>
     </div>
   )
