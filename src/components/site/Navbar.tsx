@@ -116,6 +116,15 @@ export function Navbar() {
             Services
           </Link>
 
+          <Link href="/auctions" onClick={closeAllMenus} className="rounded px-3 py-2 text-sm font-semibold text-ink transition hover:bg-paper hover:text-stamp-dark">
+            Auctions
+          </Link>
+
+          <Link href="/bazaars" onClick={closeAllMenus} className="rounded px-3 py-2 text-sm font-semibold text-ink transition hover:bg-paper hover:text-stamp-dark">
+            Car bazaars
+          </Link>
+
+
           {/* Duty calculator */}
           <Link
             href="/tools/import-duty-calculator"
@@ -184,6 +193,15 @@ export function Navbar() {
                 className="block rounded px-3 py-2 text-sm text-ink hover:bg-paper"
               >
                 Services
+              </Link>
+
+
+              <Link href="/auctions" onClick={closeAllMenus} className="block rounded px-3 py-2 text-sm text-ink hover:bg-paper">
+                Auctions
+              </Link>
+
+              <Link href="/bazaars" onClick={closeAllMenus} className="block rounded px-3 py-2 text-sm text-ink hover:bg-paper">
+                Car bazaars
               </Link>
 
               {/* Verified dealers */}

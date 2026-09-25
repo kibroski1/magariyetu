@@ -3,7 +3,7 @@ import { getPayload } from '@/lib/payload'
 import { absoluteUrl, taxonomySlug } from '@/lib/seo'
 
 const STATIC_PATHS = [
-  '/', '/cars', '/sell', '/dealers', '/services', '/tools/import-duty-calculator', '/blog', '/guides', '/about', '/marketplace-rules', '/terms', '/privacy',
+  '/', '/cars', '/sell', '/dealers', '/services', '/auctions', '/bazaars', '/tools/import-duty-calculator', '/blog', '/guides', '/about', '/marketplace-rules', '/terms', '/privacy',
 ]
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

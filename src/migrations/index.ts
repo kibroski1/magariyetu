@@ -5,6 +5,7 @@ import * as migration_20260904_000000_align_crsp_with_kra_source from './2026090
 import * as migration_20260910_000000_seo_fields from './20260910_000000_seo_fields'
 import * as migration_20260910_010000_editorial_content from './20260910_010000_editorial_content'
 import * as migration_20260911_210000_first_party_analytics from './20260911_210000_first_party_analytics'
+import * as migration_20260925_100000_auctions_and_bazaars from './20260925_100000_auctions_and_bazaars'
 
 export const migrations = [
   {
@@ -34,4 +35,9 @@ export const migrations = [
   },
   { up: migration_20260910_010000_editorial_content.up, down: migration_20260910_010000_editorial_content.down, name: '20260910_010000_editorial_content' },
   { up: migration_20260911_210000_first_party_analytics.up, down: migration_20260911_210000_first_party_analytics.down, name: '20260911_210000_first_party_analytics' },
+  {
+    up: migration_20260925_100000_auctions_and_bazaars.up,
+    down: migration_20260925_100000_auctions_and_bazaars.down,
+    name: '20260925_100000_auctions_and_bazaars',
+  },
 ]

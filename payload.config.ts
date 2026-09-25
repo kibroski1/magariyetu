@@ -30,6 +30,9 @@ import { SavedSearches } from './src/collections/SavedSearches'
 import { Notifications } from './src/collections/Notifications'
 import { AnalyticsEvents } from './src/collections/AnalyticsEvents'
 import { Articles, Guides } from './src/collections/Editorial'
+import { AuctionYards } from './src/collections/AuctionYards'
+import { BazaarEvents } from './src/collections/BazaarEvents'
+import { BazaarPosts } from './src/collections/BazaarPosts'
 import { brevoAdapter } from './src/lib/brevoEmailAdapter'
 
 const filename = fileURLToPath(import.meta.url)
@@ -44,7 +47,7 @@ export default buildConfig({
     user: Users.slug,
     meta: { titleSuffix: ' â€” Magariyetu Admin' },
   },
-  collections: [Users, Dealers, ServiceProviders, Listings, Articles, Guides, Reviews, Reports, ContactMessages,SavedSearches, Notifications, AnalyticsEvents, AuditLogs, VerificationDocuments, Conversations, Messages, WhatsAppSubmissions, WhatsAppMessages, WhatsAppMedia, FeaturedOrders, Inquiries, Media, Inspections, PhoneOtps, CrspSchedule],
+  collections: [Users, Dealers, ServiceProviders, Listings, AuctionYards, BazaarEvents, BazaarPosts, Articles, Guides, Reviews, Reports, ContactMessages,SavedSearches, Notifications, AnalyticsEvents, AuditLogs, VerificationDocuments, Conversations, Messages, WhatsAppSubmissions, WhatsAppMessages, WhatsAppMedia, FeaturedOrders, Inquiries, Media, Inspections, PhoneOtps, CrspSchedule],
   editor: lexicalEditor({}),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: { outputFile: path.resolve(dirname, 'src/payload-types.ts') },
