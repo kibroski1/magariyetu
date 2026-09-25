@@ -1,3 +1,36 @@
-import Link from 'next/link'
 import { getPayload } from '@/lib/payload'
-export default async function BazaarsPage() { const { docs } = await (await getPayload()).find({ collection: 'bazaar-events', where: { and: [{ status: { equals: 'published' } }, { eventDate: { greater_than_equal: new Date().toISOString() } }] }, sort: 'eventDate', limit: 100 }); return <div><div className="mb-8"><h1 className="font-display text-3xl font-bold text-ink">Car bazaars</h1><p className="mt-1 text-ink-400">Plan your next car-shopping day and see the vehicles sellers are bringing.</p></div>{docs.length ? <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{docs.map((event: any) => <Link key={event.id} href={`/bazaars/${event.slug}`} className="rounded-lg border border-ink-100 bg-white p-5 transition hover:shadow-md"><p className="text-sm font-semibold text-stamp-dark">{new Intl.DateTimeFormat('en-KE', { dateStyle: 'full', timeStyle: 'short' }).format(new Date(event.eventDate))}</p><h2 className="mt-2 font-display text-xl font-bold text-ink">{event.title}</h2><p className="mt-2 text-sm text-ink-400">{event.venue}, {event.town}</p><p className="mt-4 text-sm text-ink-400">See the cars attendees plan to bring →</p></Link>)}</div> : <div className="rounded-lg border border-dashed border-ink-100 bg-white p-8 text-ink-400">No upcoming bazaars have been published yet. Please check back soon.</div>}</div> }
+import Link from 'next/link'
+
+export default async function BazaarsPage() {
+  const { docs: bazaars } = await (await getPayload()).find({ collection: 'bazaar-events' as any, limit: 100, sort: 'name' })
+
+  return (
+    <div>
+      <div className="mb-8">
+        <h1 className="font-display text-3xl font-bold text-ink">Car Bazaars &amp; Events</h1>
+        <p className="mt-1 text-ink-400">Discover upcoming physical car bazaars, entry fees, location details, and active listings.</p>
+      </div>
+      {bazaars.length ? (
+        <div className="grid gap-6 md:grid-cols-2">
+          {bazaars.map((bazaar: any) => (
+            <article key={bazaar.id} className="rounded-xl border border-ink-100 bg-white p-6 shadow-sm">
+              <h2 className="font-display text-2xl font-bold text-ink">{bazaar.name}</h2>
+              <p className="mt-1 text-sm text-ink-400">{[bazaar.venue, bazaar.town, bazaar.county].filter(Boolean).join(', ')}</p>
+              {bazaar.schedule && <p className="mt-3 text-sm font-medium text-stamp-dark">🗓 {bazaar.schedule}</p>}
+              {bazaar.description && <p className="mt-3 text-sm leading-relaxed text-ink-400 line-clamp-3">{bazaar.description}</p>}
+              <div className="mt-6">
+                <Link href={`/bazaars/${bazaar.slug}`} className="inline-flex items-center text-sm font-semibold text-stamp-dark hover:underline">
+                  View bazaar details &amp; listings →
+                </Link>
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <div className="rounded-lg border border-dashed border-ink-100 bg-white p-8 text-ink-400">
+          No car bazaar events listed yet. Check back soon!
+        </div>
+      )}
+    </div>
+  )
+}

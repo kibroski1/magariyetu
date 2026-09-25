@@ -71,6 +71,9 @@ export interface Config {
     dealers: Dealer;
     'service-providers': ServiceProvider;
     listings: Listing;
+    'auction-yards': AuctionYard;
+    'bazaar-events': BazaarEvent;
+    'bazaar-posts': BazaarPost;
     articles: Article;
     guides: Guide;
     reviews: Review;
@@ -78,6 +81,7 @@ export interface Config {
     'contact-messages': ContactMessage;
     'saved-searches': SavedSearch;
     notifications: Notification;
+    'analytics-events': AnalyticsEvent;
     'audit-logs': AuditLog;
     'verification-documents': VerificationDocument;
     conversations: Conversation;
@@ -102,6 +106,9 @@ export interface Config {
     dealers: DealersSelect<false> | DealersSelect<true>;
     'service-providers': ServiceProvidersSelect<false> | ServiceProvidersSelect<true>;
     listings: ListingsSelect<false> | ListingsSelect<true>;
+    'auction-yards': AuctionYardsSelect<false> | AuctionYardsSelect<true>;
+    'bazaar-events': BazaarEventsSelect<false> | BazaarEventsSelect<true>;
+    'bazaar-posts': BazaarPostsSelect<false> | BazaarPostsSelect<true>;
     articles: ArticlesSelect<false> | ArticlesSelect<true>;
     guides: GuidesSelect<false> | GuidesSelect<true>;
     reviews: ReviewsSelect<false> | ReviewsSelect<true>;
@@ -109,6 +116,7 @@ export interface Config {
     'contact-messages': ContactMessagesSelect<false> | ContactMessagesSelect<true>;
     'saved-searches': SavedSearchesSelect<false> | SavedSearchesSelect<true>;
     notifications: NotificationsSelect<false> | NotificationsSelect<true>;
+    'analytics-events': AnalyticsEventsSelect<false> | AnalyticsEventsSelect<true>;
     'audit-logs': AuditLogsSelect<false> | AuditLogsSelect<true>;
     'verification-documents': VerificationDocumentsSelect<false> | VerificationDocumentsSelect<true>;
     conversations: ConversationsSelect<false> | ConversationsSelect<true>;
@@ -642,6 +650,70 @@ export interface ServiceProvider {
   createdAt: string;
 }
 /**
+ * Auction centres and upcoming catalogues.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "auction-yards".
+ */
+export interface AuctionYard {
+  id: number;
+  name: string;
+  slug: string;
+  description?: string | null;
+  county: string;
+  town?: string | null;
+  physicalAddress?: string | null;
+  contactPhone?: string | null;
+  website?: string | null;
+  auctionDates?:
+    | {
+        auctionDate: string;
+        title: string;
+        /**
+         * Vehicles, machinery, lots or categories on offer.
+         */
+        offering: string;
+        catalogueUrl?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bazaar-events".
+ */
+export interface BazaarEvent {
+  id: number;
+  title: string;
+  slug: string;
+  eventDate: string;
+  description: string;
+  county: string;
+  town: string;
+  venue: string;
+  entryNotes?: string | null;
+  status?: ('draft' | 'published' | 'cancelled') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bazaar-posts".
+ */
+export interface BazaarPost {
+  id: number;
+  title: string;
+  vehicleDetails: string;
+  description: string;
+  askingPrice?: number | null;
+  status?: ('pending' | 'published' | 'rejected') | null;
+  moderationNote?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "articles".
  */
@@ -795,6 +867,22 @@ export interface Notification {
   body: string;
   href?: string | null;
   readAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "analytics-events".
+ */
+export interface AnalyticsEvent {
+  id: number;
+  eventType: 'page-view' | 'search' | 'listing-view' | 'whatsapp-lead' | 'sell-started' | 'listing-submitted';
+  path: string;
+  /**
+   * One-way server hash of a browser-local random identifier.
+   */
+  visitorKey: string;
+  occurredAt: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -1061,6 +1149,18 @@ export interface PayloadLockedDocument {
         value: number | Listing;
       } | null)
     | ({
+        relationTo: 'auction-yards';
+        value: number | AuctionYard;
+      } | null)
+    | ({
+        relationTo: 'bazaar-events';
+        value: number | BazaarEvent;
+      } | null)
+    | ({
+        relationTo: 'bazaar-posts';
+        value: number | BazaarPost;
+      } | null)
+    | ({
         relationTo: 'articles';
         value: number | Article;
       } | null)
@@ -1087,6 +1187,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'notifications';
         value: number | Notification;
+      } | null)
+    | ({
+        relationTo: 'analytics-events';
+        value: number | AnalyticsEvent;
       } | null)
     | ({
         relationTo: 'audit-logs';
@@ -1378,6 +1482,62 @@ export interface ListingsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "auction-yards_select".
+ */
+export interface AuctionYardsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  description?: T;
+  county?: T;
+  town?: T;
+  physicalAddress?: T;
+  contactPhone?: T;
+  website?: T;
+  auctionDates?:
+    | T
+    | {
+        auctionDate?: T;
+        title?: T;
+        offering?: T;
+        catalogueUrl?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bazaar-events_select".
+ */
+export interface BazaarEventsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  eventDate?: T;
+  description?: T;
+  county?: T;
+  town?: T;
+  venue?: T;
+  entryNotes?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bazaar-posts_select".
+ */
+export interface BazaarPostsSelect<T extends boolean = true> {
+  title?: T;
+  vehicleDetails?: T;
+  description?: T;
+  askingPrice?: T;
+  status?: T;
+  moderationNote?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "articles_select".
  */
 export interface ArticlesSelect<T extends boolean = true> {
@@ -1510,6 +1670,18 @@ export interface NotificationsSelect<T extends boolean = true> {
   body?: T;
   href?: T;
   readAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "analytics-events_select".
+ */
+export interface AnalyticsEventsSelect<T extends boolean = true> {
+  eventType?: T;
+  path?: T;
+  visitorKey?: T;
+  occurredAt?: T;
   updatedAt?: T;
   createdAt?: T;
 }
